@@ -14,7 +14,7 @@ void setup()
 {
   Serial.begin(9600);
   // SerialBT.setPin(pin);
-  SerialBT.begin("ESP32base", true);
+  SerialBT.begin("UROV_BuoyancyEngine_BaseStation", true);
   // SerialBT.setPin(pin);
   Serial.println("The device started in master mode, make sure remote BT device is on!");
 
@@ -30,7 +30,7 @@ void setup()
   }
   else
   {
-    while (!SerialBT.connected(10000))
+    while (!SerialBT.connected(1000))
     {
       SerialBT.connect();
       Serial.println("Failed to connect. Make sure remote device is available and in range, then restart app.");

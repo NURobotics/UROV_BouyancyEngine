@@ -6,13 +6,13 @@
 #endif
 
 BluetoothSerial SerialBT;
-uint8_t mac_addr[6] = {0x80, 0x08, 0x1E, 0x54, 0x20, 0x69};
+// uint8_t mac_addr[6] = {0x80, 0x08, 0x1E, 0x54, 0x20, 0x69};
 
 void setup()
 {
-  esp_base_mac_addr_set(mac_addr);
+  // esp_base_mac_addr_set(mac_addr);
   Serial.begin(9600);
-  SerialBT.begin("ESP32test"); // Bluetooth device name
+  SerialBT.begin("UROV_BuoyancyEngine"); // Bluetooth device name
   Serial.println("The device started, now you can pair it with bluetooth!");
 }
 
