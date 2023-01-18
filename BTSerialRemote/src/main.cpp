@@ -10,7 +10,7 @@
 // uint8_t mac_addr[6] = {0x80, 0x08, 0x1E, 0x54, 0x20, 0x69};
 
 BTTimeTransmitter transmitter{};
-BuoyancyEngine buoyance_engine{};
+BuoyancyEngine buoyance_engine{18, 19};
 
 std::array<std::tuple<BuoyancyEngine::State, std::function<void(void)>>, 4> state_action_values{{std::make_tuple(BuoyancyEngine::State::IdleUp, []()
                                                                                                                  { buoyance_engine.Descend(); }),

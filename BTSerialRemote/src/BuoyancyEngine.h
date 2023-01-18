@@ -15,12 +15,16 @@ public:
         TransmittingUp
     };
 
-    BuoyancyEngine(uint32_t init_time = 30000,
+    BuoyancyEngine(uint8_t extend_p,
+                   uint8_t extend_n,
+                   uint32_t init_time = 30000,
                    uint32_t descend_time = 30000,
                    uint32_t ascend_time = 30000,
                    uint32_t descend_actuate_time = 1000,
                    uint32_t ascend_actuate_time = 1000,
-                   uint32_t transmit_time = 1000) : init_time_{init_time},
+                   uint32_t transmit_time = 1000) : extend_p_{extend_p},
+                                                    extend_n_{extend_n},
+                                                    init_time_{init_time},
                                                     descend_time_{descend_time},
                                                     ascend_time_{ascend_time},
                                                     descend_actuate_time_{descend_actuate_time},
@@ -30,6 +34,10 @@ public:
     void Init()
     {
         // turn on linear actuator
+        pinMode(extend_p_, OUTPUT);
+        pinMode(extend_n_, OUTPUT);
+        digitalWrite(extend_p_, HIGH);
+        digitalWrite(extend_n_, LOW);
         current_state_ = State::Init;
         state_entry_time_ = millis();
     }
@@ -47,10 +55,14 @@ public:
             if (state_entry_time_ + ascend_actuate_time_ < millis())
             {
                 // turn off linear actuators
+                digitalWrite(extend_p_, LOW);
+                digitalWrite(extend_n_, LOW);
             }
             if (state_entry_time_ + init_time_ < millis())
             {
                 // turn off linear actuators
+                digitalWrite(extend_p_, LOW);
+                digitalWrite(extend_n_, LOW);
                 current_state_ = State::IdleUp;
                 state_entry_time_ = millis();
             }
@@ -59,6 +71,8 @@ public:
             if (requested_action_ == Action::Descend)
             {
                 // turn on linear actuator to descend
+                digitalWrite(extend_p_, LOW);
+                digitalWrite(extend_n_, HIGH);
                 current_state_ = State::ActuatingDescend;
                 state_entry_time_ = millis();
             }
@@ -67,6 +81,8 @@ public:
             if (state_entry_time_ + descend_actuate_time_ < millis())
             {
                 // turn off linear actuator
+                digitalWrite(extend_p_, LOW);
+                digitalWrite(extend_n_, LOW);
                 current_state_ = State::Descending;
                 state_entry_time_ = millis();
             }
@@ -82,6 +98,8 @@ public:
             if (requested_action_ == Action::Ascend)
             {
                 // turn on linear actuator to ascend
+                digitalWrite(extend_p_, HIGH);
+                digitalWrite(extend_n_, LOW);
                 current_state_ = State::ActuatingAscend;
                 state_entry_time_ = millis();
             }
@@ -90,6 +108,8 @@ public:
             if (state_entry_time_ + ascend_actuate_time_ < millis())
             {
                 // turn off linear actuator
+                digitalWrite(extend_p_, LOW);
+                digitalWrite(extend_n_, LOW);
                 current_state_ = State::Descending;
                 state_entry_time_ = millis();
             }
@@ -116,6 +136,8 @@ public:
     void Ascend() { requested_action_ = Action::Ascend; };
 
 private:
+    uint8_t extend_p_;
+    uint8_t extend_n_;
     uint32_t init_time_;
     uint32_t descend_time_; // unit millis
     uint32_t ascend_time_;
