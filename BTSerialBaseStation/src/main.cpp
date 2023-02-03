@@ -1,3 +1,7 @@
+/**
+ * This firmware is meant to run on a Lilygo T-Display and displays information transmitted to it from the BTSerialRemote
+ */
+
 #include <Arduino.h>
 #include "BluetoothSerial.h"
 #include <TFT_eSPI.h>
